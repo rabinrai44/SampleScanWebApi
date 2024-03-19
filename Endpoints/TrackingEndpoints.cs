@@ -11,7 +11,7 @@ public static class TrackingEndpoints
         // TrackingNumbers endpoints
 
         // GET /trackingNumbers
-        app.MapGet("/trackingNumbers/{trackingNumber}/validate", async (AppDbContext context, string trackingNumber) =>
+        app.MapGet("/trackingNumbers/{trackingNumber}/validate", async Task<IResult> (AppDbContext context, string trackingNumber) =>
         {
             var item = await context.Items.FirstOrDefaultAsync(i => i.ItemNumber == trackingNumber);
             if (item is null)

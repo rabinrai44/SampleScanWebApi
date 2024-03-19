@@ -13,7 +13,7 @@ public static class CartonEndpoints
         // Cartons endpoints
 
         // POST /cartons - Create Carton
-        app.MapPost("/cartons", async (AppDbContext context, CreateCartonDto cartonDto) =>
+        app.MapPost("/cartons", async Task<IResult> (AppDbContext context, CreateCartonDto cartonDto) =>
         {
             List<Carton> cartons = [];
             foreach (CartonDto item in cartonDto.Cartons)

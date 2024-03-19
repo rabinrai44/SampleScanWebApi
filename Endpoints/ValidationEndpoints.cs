@@ -9,7 +9,7 @@ public static class ValidationEndpoints
     public static void MapValidationEndpoints(this WebApplication app)
     {
         // GET /validatePOSID endpoint
-        app.MapGet("/validatePOSID/{posId}", async (AppDbContext context, string posId) =>
+        app.MapGet("/validatePOSID/{posId}", async Task<IResult> (AppDbContext context, string posId) =>
         {
             var item = await context.Items.FirstOrDefaultAsync(i => i.ItemNumber == posId);
             if (item is null)
@@ -23,7 +23,7 @@ public static class ValidationEndpoints
 
 
         // GET /validateUPC endpoint
-        app.MapGet("/validateUPC/{upc}", async (AppDbContext context, string upc) =>
+        app.MapGet("/validateUPC/{upc}", async Task<IResult> (AppDbContext context, string upc) =>
         {
             var item = await context.Items.FirstOrDefaultAsync(i => i.ItemNumber == upc);
             if (item is null)
@@ -37,7 +37,7 @@ public static class ValidationEndpoints
 
         // CodeValues endpoints
         // POST /codeValues/retrieve
-        app.MapPost("/codeValues/retrieve", (AppDbContext context, CodeValueRequest codeValue) =>
+        app.MapPost("/codeValues/retrieve", async Task<IResult> (AppDbContext context, CodeValueRequest codeValue) =>
         {
             // Mocking the response
             var resp = new

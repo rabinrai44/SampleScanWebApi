@@ -10,13 +10,14 @@ public static class ItemEndpoints
     public static void MapItemEndpoints(this WebApplication app)
     {
         // /items endpoint
-        app.MapGet("/items", async (AppDbContext context) =>
+        app.MapGet("/items", async Task<IResult> (AppDbContext context) =>
         {
             var items = await context.Items.ToListAsync();
-            return items;
+            return TypedResults.Ok(items);
         })
-        .WithName("GetItems")
-        .WithOpenApi();
+         .WithName("GetItems")
+         .WithOpenApi();
+
 
         // /items/{id} endpoint
         app.MapGet("/items/{id}", async Task<Results<Ok<Item>, NotFound>> (AppDbContext context, int id) =>
