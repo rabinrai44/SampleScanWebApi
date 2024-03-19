@@ -80,7 +80,7 @@ app.MapPost("/items", async (AppDbContext context, Item item) =>
 // GET /validatePOSID endpoint
 app.MapGet("/validatePOSID/{posId}", async (AppDbContext context, string posId) =>
 {
-    var item = await context.Items.FirstOrDefaultAsync(i => i.Model == posId);
+    var item = await context.Items.FirstOrDefaultAsync(i => i.ItemNumber == posId);
     if (item is null)
     {
         return Results.NotFound();
@@ -94,7 +94,7 @@ app.MapGet("/validatePOSID/{posId}", async (AppDbContext context, string posId) 
 // GET /validateUPC endpoint
 app.MapGet("/validateUPC/{upc}", async (AppDbContext context, string upc) =>
 {
-    var item = await context.Items.FirstOrDefaultAsync(i => i.Model == upc);
+    var item = await context.Items.FirstOrDefaultAsync(i => i.ItemNumber == upc);
     if (item is null)
     {
         return Results.NotFound();
@@ -106,9 +106,15 @@ app.MapGet("/validateUPC/{upc}", async (AppDbContext context, string upc) =>
 
 // CodeValues endpoints
 // POST /codeValues/retrieve
-app.MapPost("/codeValues/retrieve", async (AppDbContext context, CodeValueRequest codeValue) =>
+app.MapPost("/codeValues/retrieve", (AppDbContext context, CodeValueRequest codeValue) =>
 {
-    return Results.Created($"/codeValues/{codeValue.Code1}", codeValue);
+    // Mocking the response
+    var resp = new
+    {
+        codeString1 = "123456",
+        codeString2 = "654321",
+    };
+    return Results.Ok(resp);
 })
 .WithName("RetrieveCodeValues")
 .WithOpenApi();
@@ -119,7 +125,7 @@ app.MapPost("/codeValues/retrieve", async (AppDbContext context, CodeValueReques
 // GET /trackingNumbers
 app.MapGet("/trackingNumbers/{trackingNumber}/validate", async (AppDbContext context, string trackingNumber) =>
 {
-    var item = await context.Items.FirstOrDefaultAsync(i => i.Model == trackingNumber);
+    var item = await context.Items.FirstOrDefaultAsync(i => i.ItemNumber == trackingNumber);
     if (item is null)
     {
         return Results.NotFound();
@@ -135,7 +141,7 @@ app.MapGet("/trackingNumbers/{trackingNumber}/validate", async (AppDbContext con
 // POST /cartons - Create Carton
 app.MapPost("/cartons", async (AppDbContext context, CreateCartonDto cartonDto) =>
 {
-    List<Carton> cartons = new();
+    List<Carton> cartons = [];
     foreach (CartonDto item in cartonDto.Cartons)
     {
         var carton = new Carton

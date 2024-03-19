@@ -1,8 +1,7 @@
 namespace SampleScanWebApi.Entities;
 
-public class Carton
+public class Carton : BaseEntity
 {
-    public int Id { get; set; }
     public required string CartonId { get; set; }
     public int CartonQuantity { get; set; }
     public required string DeliveryId { get; set; }
